@@ -8,17 +8,12 @@ namespace TestingDuringClass
     {
 
         string value1;
-        string value2;
-        string value3;
-        string value4;
-        string value5;
+        float number;
         float number1;
         float number2;
         float number3;
         float number4;
         float number5;
-
-
 
         /// <summary>
         /// Printing the numbers in an array. 
@@ -53,10 +48,10 @@ namespace TestingDuringClass
             {
                 value1 = Console.ReadLine();
 
-                if (float.TryParse(value1, out number1))
+                if (float.TryParse(value1, out number))
                 {
                     invalidInput = 1;
-                    answer = number1;
+                    answer = number;
                 }
                 else
                 {
@@ -73,10 +68,8 @@ namespace TestingDuringClass
 
         void NumArray(string description)
         {
-            int smallestNum = 1999999999;
-            int largestNum = 0;
-            int invalidInput = 0;
-
+            float smallestNum = 0;
+            float largestNum = 0;
 
             Console.WriteLine(description);
 
@@ -90,7 +83,10 @@ namespace TestingDuringClass
 
             number5 = NumReturn("Fifth Number");
 
-            float[] newArray = new float[5] { number1, number2, number3, number4, number5 };
+            float[] newArray = new float[5] {number1, number2, number3, number4, number5};
+
+            smallestNum = number1;
+            largestNum = number1;
 
             foreach (int i in newArray)
             {
@@ -98,9 +94,6 @@ namespace TestingDuringClass
                 {
                     smallestNum = i;
                 }
-            }
-            foreach (int i in newArray)
-            {
                 if (i > largestNum)
                 {
                     largestNum = i;
