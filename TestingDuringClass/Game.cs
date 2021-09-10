@@ -22,7 +22,7 @@ namespace TestingDuringClass
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arraySize"></param>
-        void Numbers(int[] array, int arraySize)
+        void PrintNumbers(int[] array, int arraySize)
         {
             Console.Write("[");
 
@@ -42,10 +42,10 @@ namespace TestingDuringClass
             int invalidInput = 0;
             float answer = 0;
 
-            Console.WriteLine(description);
-
             while (!(invalidInput == 1))
             {
+                Console.Write(description);
+
                 value1 = Console.ReadLine();
 
                 if (float.TryParse(value1, out number))
@@ -55,12 +55,11 @@ namespace TestingDuringClass
                 }
                 else
                 {
+                    invalidInput = 0;
                     Console.WriteLine("invalid input");
                     Console.WriteLine("press ENTER to continue");
                     Console.ReadKey();
                     Console.Clear();
-                    invalidInput = 0;
-                    return 0;
                 }
             }
             return answer;
@@ -68,20 +67,20 @@ namespace TestingDuringClass
 
         void NumArray(string description)
         {
-            float smallestNum = 0;
-            float largestNum = 0;
+            float smallestNum;
+            float largestNum;
 
             Console.WriteLine(description);
 
-            number1 = NumReturn("First Number");
+            number1 = NumReturn("First Number: ");
 
-            number2 = NumReturn("Second Number");
+            number2 = NumReturn("Second Number: ");
 
-            number3 = NumReturn("Third Number");
+            number3 = NumReturn("Third Number: ");
 
-            number4 = NumReturn("Fourth Number");
+            number4 = NumReturn("Fourth Number: ");
 
-            number5 = NumReturn("Fifth Number");
+            number5 = NumReturn("Fifth Number: ");
 
             float[] newArray = new float[5] {number1, number2, number3, number4, number5};
 
@@ -100,7 +99,7 @@ namespace TestingDuringClass
                 }
             }
 
-            Console.WriteLine("The smallest number in your array is " + smallestNum);
+            Console.WriteLine("\nThe smallest number in your array is " + smallestNum);
             Console.WriteLine("The largest number in your array is " + largestNum);
 
 
