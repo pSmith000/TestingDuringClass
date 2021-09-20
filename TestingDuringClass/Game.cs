@@ -6,7 +6,7 @@ namespace TestingDuringClass
 {
     class Game
     {
-
+        /*
         string value1;
         float number;
         float number1;
@@ -104,13 +104,31 @@ namespace TestingDuringClass
 
 
         }
+        */
 
+        int[] AppendToArray(int[] arr, int value)
+        {
+            //Create a new array with the size of the old array
+            int[] newArray = new int[arr.Length + 1];
+
+            //Copy the values from the old array
+            for (int i = 0; i < arr.Length; i++)
+            {
+                newArray[i] = arr[i];
+            }
+
+            //set the last index to be the new item
+            newArray[newArray.Length - 1] = value;
+
+            //return the new array
+            return newArray;
+        }
 
         public void Run()
         {
-            //Calling the Numbers function and give it an array and the number
-            //of indices within that array
-            NumArray("Enter 5 numbers");
+            int[] numbers = new int[] { 1, 2, 3, 4 };
+
+            numbers = AppendToArray(numbers, 5);
         }
     }
 }
