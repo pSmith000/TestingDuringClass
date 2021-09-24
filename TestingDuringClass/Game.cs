@@ -1,134 +1,197 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using System.Threading;
 
-namespace TestingDuringClass
+namespace HelloDungeonExpanded
 {
+    public enum ItemType
+    {
+        DEFENSE,
+        ATTACK,
+        NONE
+    }
+
+    public struct Item
+    {
+        public string Name;
+        public float StatBoost;
+        public ItemType Type;
+    }
     class Game
     {
-        /*
-        string value1;
-        float number;
-        float number1;
-        float number2;
-        float number3;
-        float number4;
-        float number5;
-
-        /// <summary>
-        /// Printing the numbers in an array. 
-        /// You must put your array and the number of indices within that array
-        /// into the function when you call it.
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arraySize"></param>
-        void PrintNumbers(int[] array, int arraySize)
-        {
-            Console.Write("[");
-
-            //Gets each number in order from the array...
-            for (int i = 0; i < arraySize; i++)
-            {
-                //...and prints each number
-                Console.Write(" " + array[i] + " ");
-            }
-
-            Console.Write("]\n");
-        }
-
-        float NumReturn(string description)
-        {
-
-            int invalidInput = 0;
-            float answer = 0;
-
-            while (!(invalidInput == 1))
-            {
-                Console.Write(description);
-
-                value1 = Console.ReadLine();
-
-                if (float.TryParse(value1, out number))
-                {
-                    invalidInput = 1;
-                    answer = number;
-                }
-                else
-                {
-                    invalidInput = 0;
-                    Console.WriteLine("invalid input");
-                    Console.WriteLine("press ENTER to continue");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-            }
-            return answer;
-        }
-
-        void NumArray(string description)
-        {
-            float smallestNum;
-            float largestNum;
-
-            Console.WriteLine(description);
-
-            number1 = NumReturn("First Number: ");
-
-            number2 = NumReturn("Second Number: ");
-
-            number3 = NumReturn("Third Number: ");
-
-            number4 = NumReturn("Fourth Number: ");
-
-            number5 = NumReturn("Fifth Number: ");
-
-            float[] newArray = new float[5] {number1, number2, number3, number4, number5};
-
-            smallestNum = number1;
-            largestNum = number1;
-
-            foreach (int i in newArray)
-            {
-                if (i < smallestNum)
-                {
-                    smallestNum = i;
-                }
-                if (i > largestNum)
-                {
-                    largestNum = i;
-                }
-            }
-
-            Console.WriteLine("\nThe smallest number in your array is " + smallestNum);
-            Console.WriteLine("The largest number in your array is " + largestNum);
-
-
-        }
-        */
-
-        int[] AppendToArray(int[] arr, int value)
-        {
-            //Create a new array with the size of the old array
-            int[] newArray = new int[arr.Length + 1];
-
-            //Copy the values from the old array
-            for (int i = 0; i < arr.Length; i++)
-            {
-                newArray[i] = arr[i];
-            }
-
-            //set the last index to be the new item
-            newArray[newArray.Length - 1] = value;
-
-            //return the new array
-            return newArray;
-        }
+        private int _currentScene;
+        private bool _gameOver;
+        private Player _player;
+        private Entity _currentEnemy;
+        private string _playerName;
+        private Item[] _items;
 
         public void Run()
         {
-            int[] numbers = new int[] { 1, 2, 3, 4 };
+            //The main game loop
+            Start();
 
-            numbers = AppendToArray(numbers, 5);
+            while (!_gameOver)
+            {
+                Update();
+            }
+
+            End();
+        }
+
+        public void Start()
+        {
+            DisplayOpeningMenu();
+        }
+
+        public void Update()
+        {
+
+        }
+
+        public void End()
+        {
+
+        }
+
+        public void InitializeItems()
+        {
+            Item gun = new Item { Name = "Handgun", StatBoost = 25, Type = ItemType.ATTACK };
+
+            Item flashlight = new Item { Name = "Flashlight", StatBoost = 15, Type = ItemType.DEFENSE };
+
+            _items = new Item[] { gun, flashlight };
+        }
+
+        public void InitializeEnemy()
+        {
+
+        }
+
+        public void DisplayOpeningMenu()
+        {
+            int choice = GetInput("Welcome to the game. Would you like to: \n", "Start a New Game", "Load an Old Save");
+        }
+
+        void GetPlayerName()
+        {
+            bool validInputRecieved = true;
+            while (validInputRecieved == true)
+            {
+                TypeOutWords("Welcome! Please enter your name.\n> ", 50);
+                _playerName = Console.ReadLine();
+                Console.Clear();
+
+                int choice = GetInput("You've entered " + _playerName + ", are you sure you want to keep this name?",
+                    "Yes", "No");
+                if (choice == 0)
+                {
+                    validInputRecieved = false;
+                }
+                else
+                {
+                    validInputRecieved = true;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the players choice of character. Updates player stats based on
+        /// the character chosen.
+        /// </summary>
+        public void CharacterSelection()
+        {
+            int choice = GetInput("Nice to meet you " + _playerName + ". Please select a character.", "Brawler", "Mad Man", "Thief");
+
+            if (choice == 0)
+            {
+                _player = new Player(_playerName, 50, 25, 0, _items, "Brawler");
+            }
+            else if (choice == 1)
+            {
+                _player = new Player(_playerName, 75, 15, 10, _items, "Mad Man");
+            }
+            else if (choice == 2)
+            {
+                _player = new Player(_playerName, 75, 15, 10, _items, "Thief");
+            }
+        }
+
+        public void DisplayCurrentScene()
+        {
+
+        }
+
+
+
+        public void TypeOutWords(string sentence, int timeBetweenLetters)
+        {
+            char[] chars = sentence.ToCharArray();
+
+            for (int i = 0; i < chars.Length; i++)
+            {
+                Console.Write(chars[i]);
+                Thread.Sleep(timeBetweenLetters);
+            }
+        }
+
+        /// <summary>
+        /// Gets an input from the player based on some given decision
+        /// </summary>
+        /// <param name="description">The context for the input</param>
+        /// <param name="option1">The first option the player can choose</param>
+        /// <param name="option2">The second option the player can choose</param>
+        /// <returns></returns>
+        int GetInput(string description, params string[] options)
+        {
+            string input = "";
+            int inputRecieved = -1;
+
+            while (inputRecieved == -1)
+            {
+                //Print options
+                Console.WriteLine(description);
+
+                for (int i = 0; i < options.Length; i++)
+                {
+                    Console.WriteLine((i + 1) + "." + options[i]);
+                }
+                Console.Write("> ");
+
+                //Get input from player
+                input = Console.ReadLine();
+
+                //If the player typed an int...
+                if (int.TryParse(input, out inputRecieved))
+                {
+                    //...decrement the input and check if it's within the bounds of the array
+                    inputRecieved--;
+                    if (inputRecieved < 0 || inputRecieved >= options.Length)
+                    {
+                        //Set input recieved to be the default value
+                        inputRecieved = -1;
+                        //Display error message
+                        Console.WriteLine("Invalid Input");
+                        Console.ReadKey(true);
+                    }
+                }
+                //If the player didn't type an int
+                else
+                {
+                    //Set input recieved to be the default value
+                    inputRecieved = -1;
+                    Console.WriteLine("Invalid Input");
+                    Console.ReadKey(true);
+                }
+
+                Console.Clear();
+            }
+
+            return inputRecieved;
         }
     }
 }
+
