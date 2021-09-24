@@ -105,7 +105,7 @@ namespace HelloDungeonExpanded
             bool validInputRecieved = true;
             while (validInputRecieved == true)
             {
-                TypeOutWords("Welcome! Please enter your name.\n> ", 50);
+                TypeOutWords("Good choice! Now, please enter your name.\n> ", 50);
                 _playerName = Console.ReadLine();
                 Console.Clear();
 
@@ -160,7 +160,10 @@ namespace HelloDungeonExpanded
             }
         }
 
+        public void Introduction()
+        {
 
+        }
 
         public void TypeOutWords(string sentence, int timeBetweenLetters)
         {
