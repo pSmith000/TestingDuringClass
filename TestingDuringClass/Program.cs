@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TestingDuringClass
+namespace HelloDungeonExpanded
 {
     class Program
     {

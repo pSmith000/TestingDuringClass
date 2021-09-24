@@ -21,7 +21,7 @@ namespace HelloDungeonExpanded
     }
     class Game
     {
-        private int _currentScene;
+        private int _currentScene = 0;
         private bool _gameOver;
         private Player _player;
         private Entity _currentEnemy;
@@ -43,12 +43,12 @@ namespace HelloDungeonExpanded
 
         public void Start()
         {
-            DisplayOpeningMenu();
+            InitializeItems();
         }
 
         public void Update()
         {
-
+            DisplayCurrentScene();
         }
 
         public void End()
@@ -67,12 +67,37 @@ namespace HelloDungeonExpanded
 
         public void InitializeEnemy()
         {
+            Entity cthulu = new Entity("[REDACTED]", 300, 35, 10);
 
+            Entity god = new Entity("[REDACTED]", 150, 50, 45);
+
+            Entity satan = new Entity("[REDACTED]", 200, 40, 30);
+
+            Random rnd = new Random();
+            int num = rnd.Next(1, 3);
+
+            if (num == 1)
+            {
+                _currentEnemy = cthulu;
+            }
+            else if (num == 2)
+            {
+                _currentEnemy = god;
+            }
+            else if (num == 3)
+            {
+                _currentEnemy = satan;
+            }
         }
 
         public void DisplayOpeningMenu()
         {
             int choice = GetInput("Welcome to the game. Would you like to: \n", "Start a New Game", "Load an Old Save");
+
+            if (choice == 0)
+            {
+                _currentScene = 1;
+            }
         }
 
         void GetPlayerName()
@@ -84,7 +109,7 @@ namespace HelloDungeonExpanded
                 _playerName = Console.ReadLine();
                 Console.Clear();
 
-                int choice = GetInput("You've entered " + _playerName + ", are you sure you want to keep this name?",
+                int choice = GetInput("You've entered " + _playerName + ", are you sure you want to keep this name?\n",
                     "Yes", "No");
                 if (choice == 0)
                 {
@@ -104,7 +129,7 @@ namespace HelloDungeonExpanded
         /// </summary>
         public void CharacterSelection()
         {
-            int choice = GetInput("Nice to meet you " + _playerName + ". Please select a character.", "Brawler", "Mad Man", "Thief");
+            int choice = GetInput("Nice to meet you " + _playerName + ". Please select a character.\n", "Brawler", "Mad Man", "Thief");
 
             if (choice == 0)
             {
@@ -122,7 +147,17 @@ namespace HelloDungeonExpanded
 
         public void DisplayCurrentScene()
         {
-
+            switch (_currentScene)
+            {
+                case 0:
+                    DisplayOpeningMenu();
+                    break;
+                case 1:
+                    GetPlayerName();
+                    CharacterSelection();
+                    break;
+               
+            }
         }
 
 
@@ -153,13 +188,14 @@ namespace HelloDungeonExpanded
             while (inputRecieved == -1)
             {
                 //Print options
-                Console.WriteLine(description);
+                TypeOutWords(description, 50);
 
                 for (int i = 0; i < options.Length; i++)
                 {
-                    Console.WriteLine((i + 1) + "." + options[i]);
+                    TypeOutWords((i + 1) + "." + options[i], 30);
+                    Console.WriteLine(" ");
                 }
-                Console.Write("> ");
+                TypeOutWords("> ", 50);
 
                 //Get input from player
                 input = Console.ReadLine();
