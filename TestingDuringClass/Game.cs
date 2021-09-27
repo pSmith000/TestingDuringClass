@@ -241,6 +241,21 @@ namespace HelloDungeonExpanded
             }
         }
 
+        public void DisplayEquipItemMenu()
+        {
+            //Get item index
+            int choice = GetInput("Select an item to equip.", _player.GetItemNames());
+
+            //Equip item at given index
+            if (!_player.TryEquipItem(choice))
+            {
+                Console.WriteLine("You couldn't find that item in your bag.");
+            }
+
+            //Print feedback
+            Console.WriteLine("You equipped " + _player.CurrentItem.Name + "!");
+        }
+
         public void Introduction()
         {
             Console.Write("Autosaving ");
@@ -305,7 +320,38 @@ namespace HelloDungeonExpanded
 
         public void FirstEncounter()
         {
-           int choice = GetInput("What would you like to do?\n", "Push Forward", "Equip Item", "Remove Item", "Save Game");
+            int choice = GetInput("What would you like to do?\n", "Push Forward", "Equip Item", "Remove Item", "Save Game");
+
+            if (choice == 0)
+            {
+
+            }
+            else if (choice == 1)
+            {
+                DisplayEquipItemMenu();
+                Console.ReadKey(true);
+                Console.Clear();
+            }
+            else if (choice == 2)
+            {
+                if (!_player.TryRemoveCurrentItem())
+                {
+                    Console.WriteLine("You don't have anything equipped.");
+                }
+                else
+                {
+                    Console.WriteLine("You placed the item in your bag");
+                }
+                Console.ReadKey(true);
+                Console.Clear();
+            }
+            else if (choice == 3)
+            {
+                Save();
+                Console.WriteLine("Saved Game");
+                Console.ReadKey(true);
+                Console.Clear();
+            }
 
 
         }
