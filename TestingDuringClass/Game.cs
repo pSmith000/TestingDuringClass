@@ -44,6 +44,7 @@ namespace HelloDungeonExpanded
         public void Start()
         {
             InitializeItems();
+            InitializeEnemy();
         }
 
         public void Update()
@@ -56,6 +57,62 @@ namespace HelloDungeonExpanded
 
         }
 
+        public void Save()
+        {
+            StreamWriter writer = new StreamWriter("SaveData.txt");
+
+            writer.WriteLine(_currentScene);
+
+            _player.Save(writer);
+
+            _currentEnemy.Save(writer);
+
+            writer.Close();
+        }
+
+        public bool Load()
+        {
+            bool loadSuccessful = true;
+
+            if (!File.Exists("SaveData.txt"))
+            {
+                loadSuccessful = false;
+            }
+
+            StreamReader reader = new StreamReader("SaveData.txt");
+
+            if (!int.TryParse(reader.ReadLine(), out _currentScene))
+            {
+                //...return false
+                loadSuccessful = false;
+            }
+
+            string job = reader.ReadLine();
+
+            _player = new Player(_items);
+
+            _player.Job = job;
+
+            if (!_player.Load(reader))
+            {
+                loadSuccessful = false;
+            }
+
+            _currentEnemy = new Entity();
+
+            if (!_currentEnemy.Load(reader))
+            {
+                loadSuccessful = false;
+            }
+
+            reader.Close();
+
+            return loadSuccessful;
+        }
+        
+            
+        
+
         public void InitializeItems()
         {
             Item gun = new Item { Name = "Handgun", StatBoost = 25, Type = ItemType.ATTACK };
@@ -67,14 +124,14 @@ namespace HelloDungeonExpanded
 
         public void InitializeEnemy()
         {
-            Entity cthulu = new Entity("[REDACTED]", 300, 35, 10);
+            Entity cthulu = new Entity("Cthulu", 300, 35, 10);
 
-            Entity god = new Entity("[REDACTED]", 150, 50, 45);
+            Entity god = new Entity("God", 150, 50, 45);
 
-            Entity satan = new Entity("[REDACTED]", 200, 40, 30);
+            Entity satan = new Entity("Satan", 200, 40, 30);
 
             Random rnd = new Random();
-            int num = rnd.Next(1, 3);
+            int num = rnd.Next(1, 4);
 
             if (num == 1)
             {
@@ -97,6 +154,22 @@ namespace HelloDungeonExpanded
             if (choice == 0)
             {
                 _currentScene = 1;
+            }
+            else if (choice == 1)
+            {
+                if (Load())
+                {
+                    Console.WriteLine("Welcome back!");
+                    Console.ReadKey(true);
+                    Console.Clear();
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Load Failed.");
+                    Console.ReadKey(true);
+                    Console.Clear();
+                }
             }
         }
 
@@ -133,16 +206,18 @@ namespace HelloDungeonExpanded
 
             if (choice == 0)
             {
-                _player = new Player(_playerName, 50, 25, 0, _items, "Brawler");
+                _player = new Player(_playerName, 50, 25, 0, 100, 0, _items, "Brawler");
             }
             else if (choice == 1)
             {
-                _player = new Player(_playerName, 75, 15, 10, _items, "Mad Man");
+                _player = new Player(_playerName, 75, 15, 10, 75, 0, _items, "Mad Man");
             }
             else if (choice == 2)
             {
-                _player = new Player(_playerName, 75, 15, 10, _items, "Thief");
+                _player = new Player(_playerName, 75, 15, 10, 85, 10, _items, "Thief");
             }
+
+            _currentScene = 2;
         }
 
         public void DisplayCurrentScene()
@@ -156,12 +231,82 @@ namespace HelloDungeonExpanded
                     GetPlayerName();
                     CharacterSelection();
                     break;
+                case 2:
+                    Introduction();
+                    break;
+                case 3:
+                    FirstEncounter();
+                    break;
                
             }
         }
 
         public void Introduction()
         {
+            Console.Write("Autosaving ");
+
+            for (int i = 0; i < 101; i++)
+            {
+                Random rnd = new Random();
+                int num = rnd.Next(1, 75);
+                Console.Write(i + "%");
+                Thread.Sleep(num);
+                Console.SetCursorPosition(11, 0);
+                Console.Write(" ");
+            }
+
+            Thread.Sleep(1000);
+
+            Console.Clear();
+
+            Save();
+
+            Console.WriteLine("Game Saved");
+
+            Thread.Sleep(500);
+
+            Console.Clear();
+
+            TypeOutWords("Now that the boring things are over let me introduce myself.\n", 50);
+            TypeOutWords(". . .", 150);
+            TypeOutWords("I am your enemy", 50);
+
+            Thread.Sleep(400);
+
+            TypeOutWords("\nNow... be rebooted into my world", 100);
+
+            Thread.Sleep(400);
+
+            TypeOutWords("dddddddddddrebootworld\n" + _playerName + "         ootintomyworld\nmyworldmyworld     ERROR\n       orldREB0OT", 10);
+
+            TypeOutWords(".....", 150);
+            TypeOutWords("\n'It's time to wake up'", 50);
+            TypeOutWords("\n\n(You hear a voice and open your eyes. You awaken to an empty, dimly lit room" +
+                "\nThere is only one door and a table in front of you with a handgun, a flashlight, and a note on it. The note says" +
+                "\n'Survive for me. You must always move forward.'\n\nYou pick up the flashlight and handgun. ", 35);
+
+            for (int i = 0; i < 99; i++)
+            {
+                Random rnd = new Random();
+                int num = rnd.Next(1, 75);
+                Console.Write("INSTALLING INFECTION ");
+                Console.Write(i + "%");
+                Thread.Sleep(num);
+                Console.SetCursorPosition(16, 8);
+                Console.Write(" ");
+            }
+
+            Thread.Sleep(1500);
+
+            Console.Clear();
+
+            _currentScene = 3;
+        }
+
+        public void FirstEncounter()
+        {
+           int choice = GetInput("What would you like to do?\n", "Push Forward", "Equip Item", "Remove Item", "Save Game");
+
 
         }
 

@@ -84,12 +84,14 @@ namespace HelloDungeonExpanded
             _currentItemIndex = -1;
         }
 
-        public Player(string name, float health, float attackPower, float defensePower, Item[] items, string job) : base(name, health, attackPower, defensePower)
+        public Player(string name, float health, float attackPower, float defensePower, float sanity, float infection, Item[] items, string job) : base(name, health, attackPower, defensePower)
         {
             _items = items;
             _currentItem.Name = "Nothing";
             _job = job;
             _currentItemIndex = -1;
+            _sanity = sanity;
+            _infection = infection;
         }
 
         /// <summary>
@@ -154,6 +156,8 @@ namespace HelloDungeonExpanded
             writer.WriteLine(_job);
             base.Save(writer);
             writer.WriteLine(_currentItemIndex);
+            writer.WriteLine(_sanity);
+            writer.WriteLine(_infection);
         }
 
         public override bool Load(StreamReader reader)
@@ -172,8 +176,18 @@ namespace HelloDungeonExpanded
                 return false;
             }
 
+            if (!float.TryParse(reader.ReadLine(), out _sanity))
+            {
+                return false;
+            }
+
+            if (!float.TryParse(reader.ReadLine(), out _infection))
+            {
+                return false;
+            }
+
             //Return whether or not the item was equipped successfully
-            return TryEquipItem(_currentItemIndex);
+            return true;
         }
     }
 }
