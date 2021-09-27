@@ -50,6 +50,20 @@ namespace HelloDungeonExpanded
 
         public float TakeDamage(float damageAmount)
         {
+            float damageTaken = Health - damageAmount;
+
+            _health = damageTaken;
+
+            if (_health > 100)
+            {
+                _health = 100;
+            }
+
+            return damageTaken;
+        }
+
+        public float TakeDamageFromBoss(float damageAmount)
+        {
             float damageTaken = damageAmount - DefensePower;
 
             if (damageTaken < 0)

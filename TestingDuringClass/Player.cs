@@ -94,6 +94,34 @@ namespace HelloDungeonExpanded
             _infection = infection;
         }
 
+        public float LoseSanity(float damageAmount)
+        {
+            float damageTaken = Sanity - damageAmount;
+
+            _sanity = damageTaken;
+
+            if (_sanity > 100)
+            {
+                _sanity = 100;
+            }
+
+            return damageTaken;
+        }
+
+        public float GainInfection(float damageAmount)
+        {
+            float damageTaken = Infection + damageAmount;
+
+            _infection = damageTaken;
+
+            if (_infection > 100)
+            {
+                _infection = 100;
+            }
+
+            return damageTaken;
+        }
+
         /// <summary>
         /// Sets the item at the given index to be the current item
         /// </summary>

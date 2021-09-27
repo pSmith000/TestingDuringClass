@@ -244,16 +244,16 @@ namespace HelloDungeonExpanded
         public void DisplayEquipItemMenu()
         {
             //Get item index
-            int choice = GetInput("Select an item to equip.", _player.GetItemNames());
+            int choice = GetInput("Select an item to equip.\n", _player.GetItemNames());
 
             //Equip item at given index
             if (!_player.TryEquipItem(choice))
             {
-                Console.WriteLine("You couldn't find that item in your bag.");
+                TypeOutWords("You couldn't find that item in your bag.", 50);
             }
 
             //Print feedback
-            Console.WriteLine("You equipped " + _player.CurrentItem.Name + "!");
+            TypeOutWords("You equipped the " + _player.CurrentItem.Name + "!", 50);
         }
 
         public void Introduction()
@@ -276,7 +276,7 @@ namespace HelloDungeonExpanded
 
             Save();
 
-            Console.WriteLine("Game Saved");
+            TypeOutWords("Game Saved", 50);
 
             Thread.Sleep(500);
 
@@ -294,12 +294,6 @@ namespace HelloDungeonExpanded
 
             TypeOutWords("dddddddddddrebootworld\n" + _playerName + "         ootintomyworld\nmyworldmyworld     ERROR\n       orldREB0OT", 10);
 
-            TypeOutWords(".....", 150);
-            TypeOutWords("\n'It's time to wake up'", 50);
-            TypeOutWords("\n\n(You hear a voice and open your eyes. You awaken to an empty, dimly lit room" +
-                "\nThere is only one door and a table in front of you with a handgun, a flashlight, and a note on it. The note says" +
-                "\n'Survive for me. You must always move forward.'\n\nYou pick up the flashlight and handgun. ", 35);
-
             for (int i = 0; i < 99; i++)
             {
                 Random rnd = new Random();
@@ -315,6 +309,12 @@ namespace HelloDungeonExpanded
 
             Console.Clear();
 
+            TypeOutWords(".....", 150);
+            TypeOutWords("\n'It's time to wake up'", 50);
+            TypeOutWords("\n\n(You hear a voice and open your eyes. You awaken to an empty, dimly lit room" +
+                "\nThere is only one door and a table in front of you with a handgun, a flashlight, and a note on it. The note says" +
+                "\n'Survive for me. You must always move forward.')\n\nYou pick up the flashlight and handgun. ", 35);
+
             _currentScene = 3;
         }
 
@@ -324,7 +324,7 @@ namespace HelloDungeonExpanded
 
             if (choice == 0)
             {
-
+                RoomJourney();
             }
             else if (choice == 1)
             {
@@ -336,11 +336,11 @@ namespace HelloDungeonExpanded
             {
                 if (!_player.TryRemoveCurrentItem())
                 {
-                    Console.WriteLine("You don't have anything equipped.");
+                    TypeOutWords("You don't have anything equipped.", 50);
                 }
                 else
                 {
-                    Console.WriteLine("You placed the item in your bag");
+                    TypeOutWords("You placed the item in your bag", 50);
                 }
                 Console.ReadKey(true);
                 Console.Clear();
@@ -348,12 +348,102 @@ namespace HelloDungeonExpanded
             else if (choice == 3)
             {
                 Save();
-                Console.WriteLine("Saved Game");
+                TypeOutWords("Saved Game", 50);
                 Console.ReadKey(true);
                 Console.Clear();
             }
 
 
+        }
+
+        public void RoomJourney()
+        {
+            Random rnd = new Random();
+            int room1 = rnd.Next(1, 7);
+
+            if (room1 == 1)
+            {
+                //Each of these rooms have a specific scene within them
+                //this could either be good or bad for the player
+                //this is the first room
+                
+                Console.WriteLine("You walk in to a dimly lit room. A man stands before you bloodied and bruised." +
+                    "\n He holds a sword in his hand. He slowly face you and says 'r-r-re b-boot?' The man then" +
+                    "\n lunges at you.\n");
+                if (_player.CurrentItem.Type == ItemType.ATTACK)
+                {
+                    Console.WriteLine("You pull out your handgun and shoot the man in the chest. He pulls back and tilts his head at you." +
+                        "\n 're...boot...' He turns away and as he does his body siezes and falls to the ground. He is dead.\n");
+                    Console.WriteLine("SUSTAIN 5 SANITY LOSS");
+                    _player.GainInfection(5);
+                    _player.LoseSanity(5);
+                }
+                else
+                {
+                    Console.WriteLine("The man swings his sword widly at you. With no weapon yourself you are defenseless." +
+                        "\n He madly slashes your chest and arms screaming the same word over and over again." +
+                        "\n re..boot   rebOOT   REBOOT   ??REE??BOOTT?????REEEB?OO?TTT\n He collapses to the floor in the middle of one of his swings at you.\n");
+                    Console.WriteLine("You take severe injuries");
+                    Console.WriteLine("SUSTAIN 35 DAMAGE");
+                    Console.WriteLine("SUSTAIN 15 SANITY LOSS");
+                    _player.GainInfection(5);
+                    _player.TakeDamage(35);
+                    _player.LoseSanity(15);
+                }
+            }
+            //The second room
+            else if (room1 == 2)
+            {
+                Console.WriteLine("You walk in to a room with a roaring fireplace and lush carpets. On the table you find a medkit and heal 20 health!");
+                _player.TakeDamage(-20);
+            }
+            //the third room
+            else if (room1 == 3)
+            {
+                Console.WriteLine("You enter in a sanctuary of sorts. There are pews, symbolic pieces, and scripture on the walls. It feels safe. You regain 20 sanity.");
+                _player.LoseSanity(-20);
+                
+            }
+            //the fourth room
+            else if (room1 == 4)
+            {
+                Console.WriteLine("You walk in to a room that smells strongly of iron. It is too dark to see but the walls are covered in a warm liquid. \n" +
+                    "While it does make you nauseous, you are safe.\n");
+                Console.WriteLine("SUSTAIN 30 SANITY LOSS");
+                _player.LoseSanity(30);
+            }
+            //the fifth room
+            else if (room1 == 5)
+            {
+                Console.WriteLine("You stumble into a long hallway. As you walk down this dim lit path you find a sword lying on the ground.\n" +
+                    "You may take it if you do not have a weapon already.");
+            }
+            //the sixth room
+            else if (room1 == 6)
+            {
+                Console.WriteLine("Walking into this room you smell tar and asphalt. The air is humid and thick. Breathing is an almost impossible task. " +
+                    "\nYou see a vial of purple sludge on the ground half spilled over. You inspect it. \n");
+
+                int input = GetInput("Would you like to drink?", "Yes", "No");
+
+                if (input == 1)
+                {
+                    Console.WriteLine("\nYou decide to drink this putrid liquid. As it goes down your esophagus it has the taste of rotting flesh and the consistancy of spoiled milk." +
+                        "\nImmediately you vomit. What comes out is a viscous black liquid. As this matter leaves your body, your mind feels less cluttered.");
+                    _player.GainInfection(-15);
+                }
+
+                else if (input == 2)
+                {
+                    Console.WriteLine("\nYou use your better judgement and decide not to drink the vial of mysterious liquid." +
+                        "\nYou move forward.");
+                }
+            }
+            Console.WriteLine("");
+
+            Console.WriteLine("Press ENTER to continue");
+            Console.ReadKey();
+            Console.Clear();
         }
 
         public void TypeOutWords(string sentence, int timeBetweenLetters)
