@@ -235,6 +235,7 @@ namespace HelloDungeonExpanded
                     Introduction();
                     break;
                 case 3:
+                    PrintPlayerStats();
                     FirstEncounter();
                     break;
                
@@ -311,9 +312,9 @@ namespace HelloDungeonExpanded
 
             TypeOutWords(".....", 150);
             TypeOutWords("\n'It's time to wake up'", 50);
-            TypeOutWords("\n\n(You hear a voice and open your eyes. You awaken to an empty, dimly lit room" +
+            TypeOutWords("\n\nYou hear a voice and open your eyes. You awaken to an empty, dimly lit room" +
                 "\nThere is only one door and a table in front of you with a handgun, a flashlight, and a note on it. The note says" +
-                "\n'Survive for me. You must always move forward.')\n\nYou pick up the flashlight and handgun. ", 35);
+                "\n'Survive for me. You must always move forward.'\n\nYou pick up the flashlight and handgun. \n", 35);
 
             _currentScene = 3;
         }
@@ -359,21 +360,21 @@ namespace HelloDungeonExpanded
         public void RoomJourney()
         {
             Random rnd = new Random();
-            int room1 = rnd.Next(1, 7);
+            int room1 = rnd.Next(81);
 
-            if (room1 == 1)
+            if (room1 > 0 && room1 < 11)
             {
                 //Each of these rooms have a specific scene within them
                 //this could either be good or bad for the player
                 //this is the first room
                 
                 TypeOutWords("You walk in to a dimly lit room. A man stands before you bloodied and bruised." +
-                    "\n He holds a sword in his hand. He slowly face you and says 'r-r-re b-boot?' The man then" +
-                    "\n lunges at you.\n", 15);
+                    "\n He holds a sword in his hand. He slowly faces you and says 'r-r-re b-boot?' The man then" +
+                    "\n lunges at you.\n\n", 15);
                 if (_player.CurrentItem.Type == ItemType.ATTACK)
                 {
                     TypeOutWords("You pull out your handgun and shoot the man in the chest. He pulls back and tilts his head at you." +
-                        "\n 're...boot...' He turns away and as he does his body siezes and falls to the ground. He is dead.\n", 20);
+                        "\n're...boot...' He turns away and as he does his body siezes and falls to the ground. He seems dead.\n", 20);
                     TypeOutWords("SUSTAIN 5 SANITY LOSS", 50);
                     _player.GainInfection(5);
                     _player.LoseSanity(5);
@@ -381,10 +382,10 @@ namespace HelloDungeonExpanded
                 else
                 {
                     TypeOutWords("The man swings his sword widly at you. With no weapon yourself you are defenseless." +
-                        "\n He madly slashes your chest and arms screaming the same word over and over again." +
-                        "\n re..boot   rebOOT   REBOOT   ??REE??BOOTT?????REEEB?OO?TTT\n He collapses to the floor in the middle of one of his swings at you.\n", 25);
-                    TypeOutWords("You take severe injuries", 50);
-                    TypeOutWords("SUSTAIN 35 DAMAGE", 50);
+                        "\nHe madly slashes your chest and arms screaming the same word over and over again." +
+                        "\nre..boot   rebOOT   REBOOT   ??REE??BOOTT?????REEEB?OO?TTT\n He collapses to the floor in the middle of one of his swings at you.\n", 25);
+                    TypeOutWords("You take severe injuries\n", 50);
+                    TypeOutWords("SUSTAIN 35 DAMAGE\n", 50);
                     TypeOutWords("SUSTAIN 15 SANITY LOSS", 50);
                     _player.GainInfection(5);
                     _player.TakeDamage(35);
@@ -392,20 +393,20 @@ namespace HelloDungeonExpanded
                 }
             }
             //The second room
-            else if (room1 == 2)
+            else if (room1 > 10 && room1 < 21)
             {
                 TypeOutWords("You walk in to a room with a roaring fireplace and lush carpets. On the table you find a medkit and heal 20 health!", 25);
                 _player.TakeDamage(-20);
             }
             //the third room
-            else if (room1 == 3)
+            else if (room1 > 20 && room1 < 31)
             {
                 TypeOutWords("You enter in a sanctuary of sorts. There are pews, symbolic pieces, and scripture on the walls. It feels safe. You regain 20 sanity.", 25);
                 _player.LoseSanity(-20);
                 
             }
             //the fourth room
-            else if (room1 == 4)
+            else if (room1 > 30 && room1 < 41)
             {
                 TypeOutWords("You walk in to a room that smells strongly of iron. It is too dark to see but the walls are covered in a warm liquid. \n" +
                     "While it does make you nauseous, you are safe.\n", 25);
@@ -413,13 +414,47 @@ namespace HelloDungeonExpanded
                 _player.LoseSanity(30);
             }
             //the fifth room
-            else if (room1 == 5)
+            else if (room1 > 40 && room1 < 51)
             {
-                TypeOutWords("You stumble into a long hallway. As you walk down this dim lit path you find a sword lying on the ground.\n" +
-                    "You may take it if you do not have a weapon already.", 25);
+                TypeOutWords("You stumble into a long hallway that splits off into two different paths. One on the left, and one on the right." +
+                    "\n" , 25);
+
+                GetInput("Which path would you like to take?", "Left", "Right");
+
+                Random random = new Random();
+                int num = random.Next(1, 3);
+
+                if (num == 1)
+                {
+                    TypeOutWords("You take this path and walk along it for some time. As you go the walls get closer and closer to you. " +
+                        "\nYou look back for an escape but the floor crumbles to a black pit behind you. You start to panic and sprint forward." +
+                        "\nYou stumble... landing on the floor. You look up and meet the eyeless gaze of [REDACTED]. Hope is fleeting.", 25);
+                    Thread.Sleep(400);
+                    Console.Clear();
+                    TypeOutWords("'Fall'\n", 150);
+                    Thread.Sleep(400);
+                    TypeOutWords("A demonically similar voice.\n\n", 100);
+                    TypeOutWords("The ground crumbles beneath you and you fall", 50);
+                    Console.SetCursorPosition(0, 0);
+                    TypeOutWords("fallfallfallfallfallfallfallfallfallfallfall", 150);
+                    Thread.Sleep(400);
+                    Console.Clear();
+                    TypeOutWords("You hit the ground with a thud. You open your eyes and you are in an empty concrete room with a door in front of you." +
+                        "\n\nSUSTAIN 40 DAMAGE\nSUSTAIN 20 SANITY LOSS", 50);
+
+                    _player.TakeDamage(40);
+                    _player.LoseSanity(20);
+                }
+                else
+                {
+                    TypeOutWords("You stumble down this path for a few minutes. It opens up to a large elegant room with a pool in the center." +
+                        "\nAs you set into the pool you immediately feel refreshed. You heal 15 health and 10 sanity.", 50);
+                    _player.TakeDamage(-15);
+                    _player.LoseSanity(-10);
+                }
             }
             //the sixth room
-            else if (room1 == 6)
+            else if (room1 > 50 && room1 < 61)
             {
                 TypeOutWords("Walking into this room you smell tar and asphalt. The air is humid and thick. Breathing is an almost impossible task. " +
                     "\nYou see a vial of purple sludge on the ground half spilled over. You inspect it. \n", 25);
@@ -428,8 +463,10 @@ namespace HelloDungeonExpanded
 
                 if (input == 0)
                 {
-                    TypeOutWords("\nYou decide to drink this putrid liquid. As it goes down your esophagus it has the taste of rotting flesh and the consistancy of spoiled milk." +
-                        "\nImmediately you vomit. What comes out is a viscous black liquid. As this matter leaves your body, your mind feels less cluttered.", 25);
+                    TypeOutWords("You decide to drink this putrid liquid. As it goes down your esophagus it has the taste of rotting flesh " +
+                        "\nand the consistancy of spoiled milk." +
+                        "\nImmediately you vomit. What comes out is a viscous black liquid. As this matter leaves your body, " +
+                        "\nyour mind feels less cluttered.", 25);
                     _player.GainInfection(-15);
                 }
 
@@ -439,11 +476,51 @@ namespace HelloDungeonExpanded
                         "\nYou move forward.", 25);
                 }
             }
+            else if (room1 > 60 && room1 < 71)
+            {
+                TypeOutWords("You open the next door and inside you see ", 25);
+
+                if (_player.CurrentItem.Type == ItemType.DEFENSE)
+                {
+                    TypeOutWords("a hideous creature shrouded in the darkness. You try to shine your flashlight directly at it, but it's gone." +
+                        "\nAs you walk in you feel a drip on your shoulder and look up. Your eyes meet a souless, black grin. " +
+                        "\nIt's skin hangs loosely from its bones as its head spins slowly towards you. You become paralyzed with fear." +
+                        "\n\nAs you try to take a step back the creature falls upon you, scratching at your face as it tries to grab it." +
+                        "\nYou rush forward to the next door and before you open it you look back for the creature, but see nothing." +
+                        "\nIt is gone.\n\nSUSTAIN 30 SANITY LOSS\nSUSTAIN 15 DAMAGE", 25);
+                    _player.TakeDamage(15);
+                    _player.LoseSanity(30);
+                    _player.GainInfection(8);
+                }
+                else
+                {
+                    TypeOutWords("nothing. You think of taking out your flashlight but decide its better to have a weapon than light." +
+                        "\nYou walk through the room and seemingly nothing happens. Your anxious, but alive.\n\nSUSTAIN 5 SANITY LOSS", 25);
+                    _player.LoseSanity(5);
+                }
+            }
+            else if (room1 > 70 && room1 < 81)
+            {
+                TypeOutWords("This room is beyond dark.", 25);
+            }
             Console.WriteLine("");
 
             TypeOutWords("Press ENTER to continue", 50);
             Console.ReadKey();
             Console.Clear();
+        }
+
+        /// <summary>
+        /// Prints player stats neatly in a box
+        /// </summary>
+        void PrintPlayerStats()
+        {
+            Console.WriteLine("----------------------------");
+            Console.WriteLine("Health: " + _player.Health);
+            Console.WriteLine("Sanity: " + _player.Sanity);
+            Console.WriteLine("[REDACTED]: " + _player.Infection);
+            Console.WriteLine("----------------------------");
+            Console.WriteLine("");
         }
 
         public void TypeOutWords(string sentence, int timeBetweenLetters)
