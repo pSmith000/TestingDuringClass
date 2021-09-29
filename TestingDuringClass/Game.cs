@@ -8,9 +8,10 @@ namespace HelloDungeonExpanded
 {
     public enum ItemType
     {
+        NONE,
         DEFENSE,
-        ATTACK,
-        NONE
+        ATTACK
+        
     }
 
     public struct Item
@@ -55,7 +56,7 @@ namespace HelloDungeonExpanded
 
         public void End()
         {
-
+            TypeOutWords("'You can escape my grasp... for now.'", 75);
         }
 
         public void Save()
@@ -110,17 +111,19 @@ namespace HelloDungeonExpanded
 
             return loadSuccessful;
         }
-        
-            
-        
+
+
+
 
         public void InitializeItems()
         {
-            Item gun = new Item { Name = "Handgun", StatBoost = 25, Type = ItemType.ATTACK };
+            Item gun = new Item { Name = "the Handgun", StatBoost = 25, Type = ItemType.ATTACK };
 
-            Item flashlight = new Item { Name = "Flashlight", StatBoost = 15, Type = ItemType.DEFENSE };
+            Item flashlight = new Item { Name = "the Flashlight", StatBoost = 15, Type = ItemType.DEFENSE };
 
-            _items = new Item[] { gun, flashlight };
+            Item none = new Item { Name = "Nothing", StatBoost = 0, Type = ItemType.NONE };
+
+            _items = new Item[] { gun, flashlight, none };
         }
 
         public void InitializeEnemy()
@@ -209,15 +212,15 @@ namespace HelloDungeonExpanded
 
             if (choice == 0)
             {
-                _player = new Player(_playerName, 200, 25, 50, 100, 99, _items, "Brawler");
+                _player = new Player(_playerName, 150, 40, 20, 100, 0, _items, "Brawler");
             }
             else if (choice == 1)
             {
-                _player = new Player(_playerName, 75, 15, 10, 75, 0, _items, "Mad Man");
+                _player = new Player(_playerName, 120, 25, 40, 85, 25, _items, "Mad Man");
             }
             else if (choice == 2)
             {
-                _player = new Player(_playerName, 75, 15, 10, 85, 10, _items, "Thief");
+                _player = new Player(_playerName, 125, 25, 30, 95, 10, _items, "Thief");
             }
 
             _currentScene = 2;
@@ -266,7 +269,7 @@ namespace HelloDungeonExpanded
             }
 
             //Print feedback
-            TypeOutWords("You equipped the " + _player.CurrentItem.Name + "!", 50);
+            TypeOutWords("You equipped " + _player.CurrentItem.Name + "!", 50);
         }
 
         public void Introduction()
@@ -362,7 +365,7 @@ namespace HelloDungeonExpanded
             {
                 Save();
                 TypeOutWords("Saved Game", 50);
-                Console.ReadKey(true);
+                Thread.Sleep(500);
                 Console.Clear();
             }
             else if (choice == 4)
@@ -426,7 +429,8 @@ namespace HelloDungeonExpanded
             //the third room
             else if (room1 > 20 && room1 < 31)
             {
-                TypeOutWords("You enter in a sanctuary of sorts. There are pews, symbolic pieces, and scripture on the walls. It feels safe. You regain 20 sanity.", 25);
+                TypeOutWords("You enter in a sanctuary of sorts. There are pews, symbolic pieces, and scripture on the walls. It feels safe. " +
+                    "\nYou regain 20 sanity.", 25);
                 _player.LoseSanity(-20);
 
             }
@@ -498,7 +502,7 @@ namespace HelloDungeonExpanded
 
                 else if (input == 1)
                 {
-                    TypeOutWords("\nYou use your better judgement and decide not to drink the vial of mysterious liquid." +
+                    TypeOutWords("You use your better judgement and decide not to drink the vial of mysterious liquid." +
                         "\nYou move forward.", 25);
                 }
             }
@@ -638,7 +642,7 @@ namespace HelloDungeonExpanded
             if (_currentEnemy.Health <= 0)
             {
                 Console.Clear();
-                TypeOutWords("'You have defeated me'\n\n'You have defeated " + _currentEnemy.Name + ". I am so proud of you child.'", 75);
+                TypeOutWords("'You have defeated me'\n\n'You have defeated " + _currentEnemy.Name + ". I am so proud of you child.'\n", 75);
                 _currentScene = 5;
             }
         }

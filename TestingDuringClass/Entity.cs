@@ -54,9 +54,9 @@ namespace HelloDungeonExpanded
 
             _health = damageTaken;
 
-            if (_health > 100)
+            if (_health > 200)
             {
-                _health = 100;
+                _health = 200;
             }
 
             return damageTaken;

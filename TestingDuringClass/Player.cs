@@ -114,9 +114,9 @@ namespace HelloDungeonExpanded
 
             _infection = damageTaken;
 
-            if (_infection > 100)
+            if (_infection < 0)
             {
-                _infection = 100;
+                _infection = 0;
             }
 
             return damageTaken;
