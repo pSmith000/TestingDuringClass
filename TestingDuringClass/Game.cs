@@ -23,6 +23,7 @@ namespace HelloDungeonExpanded
     {
         private int _currentScene = 0;
         private bool _gameOver;
+        private float _currentEnemyHealth;
         private Player _player;
         private Entity _currentEnemy;
         private string _playerName;
@@ -145,6 +146,8 @@ namespace HelloDungeonExpanded
             {
                 _currentEnemy = satan;
             }
+
+            _currentEnemyHealth = _currentEnemy.Health;
         }
 
         public void DisplayOpeningMenu()
@@ -206,7 +209,7 @@ namespace HelloDungeonExpanded
 
             if (choice == 0)
             {
-                _player = new Player(_playerName, 50, 25, 0, 100, 0, _items, "Brawler");
+                _player = new Player(_playerName, 200, 25, 50, 100, 0, _items, "Brawler");
             }
             else if (choice == 1)
             {
@@ -237,6 +240,15 @@ namespace HelloDungeonExpanded
                 case 3:
                     PrintPlayerStats();
                     FirstEncounter();
+                    PlayerIsAlive();
+                    break;
+                case 4:
+                    PrintPlayerStats();
+                    BossBattle();
+                    PlayerIsAlive();
+                    break;
+                case 5:
+                    DisplayRestartMenu();
                     break;
                
             }
@@ -314,14 +326,14 @@ namespace HelloDungeonExpanded
             TypeOutWords("\n'It's time to wake up'", 50);
             TypeOutWords("\n\nYou hear a voice and open your eyes. You awaken to an empty, dimly lit room" +
                 "\nThere is only one door and a table in front of you with a handgun, a flashlight, and a note on it. The note says" +
-                "\n'Survive for me. You must always move forward.'\n\nYou pick up the flashlight and handgun. \n", 35);
+                "\n'Survive for me. You must always move forward.'\n\nYou pick up the flashlight and handgun. \n\n", 35);
 
             _currentScene = 3;
         }
 
         public void FirstEncounter()
         {
-            int choice = GetInput("What would you like to do?\n", "Push Forward", "Equip Item", "Remove Item", "Save Game");
+            int choice = GetInput("What would you like to do?\n", "Push Forward", "Equip Item", "Remove Item", "Save Game", "Run Away");
 
             if (choice == 0)
             {
@@ -353,6 +365,19 @@ namespace HelloDungeonExpanded
                 Console.ReadKey(true);
                 Console.Clear();
             }
+            else if (choice == 4)
+            {
+                Console.Clear();
+                int choice1 = GetInput("Are you sure you want to run away?\n", "Yes", "No");
+
+                if (choice1 == 0)
+                {
+                    TypeOutWords("'It is time child'\n\n[REDACTED] stands before you. \n\n'It is time to die'", 50);
+                    _currentScene = 4;
+                }
+                
+                
+            }
 
 
         }
@@ -360,14 +385,14 @@ namespace HelloDungeonExpanded
         public void RoomJourney()
         {
             Random rnd = new Random();
-            int room1 = rnd.Next(81);
+            int room1 = rnd.Next(1, 86);
 
             if (room1 > 0 && room1 < 11)
             {
                 //Each of these rooms have a specific scene within them
                 //this could either be good or bad for the player
                 //this is the first room
-                
+
                 TypeOutWords("You walk in to a dimly lit room. A man stands before you bloodied and bruised." +
                     "\n He holds a sword in his hand. He slowly faces you and says 'r-r-re b-boot?' The man then" +
                     "\n lunges at you.\n\n", 15);
@@ -403,7 +428,7 @@ namespace HelloDungeonExpanded
             {
                 TypeOutWords("You enter in a sanctuary of sorts. There are pews, symbolic pieces, and scripture on the walls. It feels safe. You regain 20 sanity.", 25);
                 _player.LoseSanity(-20);
-                
+
             }
             //the fourth room
             else if (room1 > 30 && room1 < 41)
@@ -417,7 +442,7 @@ namespace HelloDungeonExpanded
             else if (room1 > 40 && room1 < 51)
             {
                 TypeOutWords("You stumble into a long hallway that splits off into two different paths. One on the left, and one on the right." +
-                    "\n" , 25);
+                    "\n", 25);
 
                 GetInput("Which path would you like to take?", "Left", "Right");
 
@@ -501,13 +526,118 @@ namespace HelloDungeonExpanded
             }
             else if (room1 > 70 && room1 < 81)
             {
-                TypeOutWords("This room is beyond dark.", 25);
+                TypeOutWords("This room is beyond dark. ", 25);
+
+                if (_player.CurrentItem.Type == ItemType.DEFENSE)
+                {
+                    TypeOutWords("You hold your flashlight infront of you and see small fleshy creatures run away from your light." +
+                        "\nYou make it through the room with ease.", 25);
+                }
+                else if (_player.CurrentItem.Type == ItemType.ATTACK)
+                {
+                    TypeOutWords("You hold your gun infront of you and then feel scratches on your leg. " +
+                        "\nYou feel something dense crawl up your leg, so you shoot your gun at it. The flash scares these creatures away," +
+                        "\nleaving you with only light injuries.\n\nSUSTAIN 5 DAMAGE", 25);
+                    _player.TakeDamage(5);
+
+                }
+                else
+                {
+                    TypeOutWords("You stumble your way through this room and trip over something squishy." +
+                        "\nIt makes a high pitched noise and as you are getting up you feel many small, dense, fleshy creatures jump on you." +
+                        "\nYou scramble to get up and rush to the next door, but they continue to scratch and slash you\n\nSUSTAIN 35 DAMAGE", 25);
+                    _player.TakeDamage(35);
+                }
+            }
+            else if (room1 > 80 && room1 < 86)
+            {
+                TypeOutWords("'I see you'\n\n'You have made a grave mistake coming here " + _playerName + "'", 150);
+
+                int choice = GetInput("Do you wish to fight me?", "Yes", "No");
+
+                if (choice == 0)
+                {
+                    _currentScene = 4;
+                    TypeOutWords("'It is time child'\n\n[REDACTED] stands before you. \n\n'It is time to die'\n", 50);
+                    return;
+                }
+                else
+                {
+                    TypeOutWords("'Then fall'", 75);
+                    Console.SetCursorPosition(0, 6);
+                    TypeOutWords("faLL", 75);
+                    Console.SetCursorPosition(0, 6);
+                    TypeOutWords("FALL", 75);
+                    Thread.Sleep(400);
+                    Console.Clear();
+                    TypeOutWords("You fall into an abyss within your mind. Lifetimes pass before your eyes. " +
+                        "\nExistence as you know it crumbles and reality shakes. A faint whisper..." +
+                        "\n'It's time to wake up'", 50);
+                }
             }
             Console.WriteLine("");
 
             TypeOutWords("Press ENTER to continue", 50);
             Console.ReadKey();
             Console.Clear();
+        }
+
+        public void BossBattle()
+        {
+            
+
+            int choice = GetInput("\n\nWhat would you like to do?\n", "Attack", "Equip Item", "Run Away", "Save");
+
+            if (choice == 0)
+            {
+                float damageTaken = _player.Attack(_currentEnemy);
+                Console.WriteLine("You dealt " + damageTaken + " damage!");
+
+                damageTaken = _currentEnemy.Attack(_player);
+                Console.WriteLine("[REDACTED] has dealt " + damageTaken);
+
+                Console.ReadKey(true);
+                Console.Clear();
+            }
+            else if (choice == 1)
+            {
+                DisplayEquipItemMenu();
+                Console.ReadKey(true);
+                Console.Clear();
+            }
+            else if (choice == 2)
+            {
+                if (_currentEnemy.Health <= _currentEnemyHealth / 2)
+                {
+                    TypeOutWords("You are able to run away. You go back through every door you have been to." +
+                        "\nYou trudge through the dark and make your way back to the first room. There's a new door." +
+                        "\nYou go to it and it opens to a bright and sunny field. You run through and everything is actually there." +
+                        "\nYou touch the dewy grass with your bloddied fingertips. Your grasp the tall floawers growing all around." +
+                        "\nYou feel the warmth all around you. You are happy. A familiar whisper...\n\n", 50);
+                    TypeOutWords("'It's time to wake up'", 200);
+                    Console.ReadKey(true);
+                    _currentScene = 5;
+                }
+                else
+                {
+                    TypeOutWords("'You cannot escape'", 50);
+                    Thread.Sleep(400);
+                    Console.Clear();
+                }
+            }
+            else if (choice == 3)
+            {
+                TypeOutWords("You cannot save here, [REDACTED] has control.", 50);
+                Thread.Sleep(400);
+                Console.Clear();
+            }
+
+            if (_currentEnemy.Health <= 0)
+            {
+                Console.Clear();
+                TypeOutWords("'You have defeated me'\n\n'You have defeated " + _currentEnemy.Name + ". I am so proud of you child.'", 75);
+                _currentScene = 5;
+            }
         }
 
         /// <summary>
@@ -521,6 +651,64 @@ namespace HelloDungeonExpanded
             Console.WriteLine("[REDACTED]: " + _player.Infection);
             Console.WriteLine("----------------------------");
             Console.WriteLine("");
+        }
+
+        /// <summary>
+        /// If player is dead it returns false
+        /// If alive it returns true
+        /// </summary>
+        /// <returns></returns>
+        bool PlayerIsAlive()
+        {
+            if (_player.Health <= 0 || _player.Sanity <= 0)
+            {
+                TypeOutWords("You have perished\n", 50);
+                Thread.Sleep(400);
+                _currentScene = 5;
+                return false;
+            }
+
+            else if (_player.Infection >= 100)
+            {
+                Console.WriteLine("[REDACTED] has corrupted your thoughts. It has been in your brain this whole time.");
+                Console.WriteLine("The end truly was not the end. You have been...");
+                Console.WriteLine("\nPress ENTER to become INFECTED");
+                Console.ReadKey();
+
+                TypeOutWords("dddddddddddrebootworld\n" + _playerName + "         ootintomyworld\nmyworldmyworld     ERROR\n       orldREB0OT", 10);
+
+                for (int i = 0; i < 101; i++)
+                {
+                    Random rnd = new Random();
+                    int num = rnd.Next(1, 75);
+                    Console.Write("INSTALLING INFECTION ");
+                    Console.Write(i + "%");
+                    Thread.Sleep(num);
+                    Console.SetCursorPosition(16, 8);
+                    Console.Write(" ");
+                }
+
+                Thread.Sleep(1500);
+
+                Console.Clear();
+
+                _currentScene = 5;
+            }
+            return true;
+        }
+
+        void DisplayRestartMenu()
+        {
+            int choice = GetInput("Play Again?\n", "Yes", "No");
+
+            if (choice == 0)
+            {
+                _currentScene = 1;
+            }
+            else if (choice == 1)
+            {
+                _gameOver = true;
+            }
         }
 
         public void TypeOutWords(string sentence, int timeBetweenLetters)

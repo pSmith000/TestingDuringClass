@@ -78,7 +78,7 @@ namespace HelloDungeonExpanded
 
         public float Attack(Entity defender)
         {
-            return defender.TakeDamage(AttackPower);
+            return defender.TakeDamageFromBoss(AttackPower);
         }
 
         public virtual void Save(StreamWriter writer)
