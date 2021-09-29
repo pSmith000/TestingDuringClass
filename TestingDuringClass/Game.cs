@@ -209,7 +209,7 @@ namespace HelloDungeonExpanded
 
             if (choice == 0)
             {
-                _player = new Player(_playerName, 200, 25, 50, 100, 0, _items, "Brawler");
+                _player = new Player(_playerName, 200, 25, 50, 100, 99, _items, "Brawler");
             }
             else if (choice == 1)
             {
@@ -372,7 +372,7 @@ namespace HelloDungeonExpanded
 
                 if (choice1 == 0)
                 {
-                    TypeOutWords("'It is time child'\n\n[REDACTED] stands before you. \n\n'It is time to die'", 50);
+                    TypeOutWords("'It is time child'\n\n[REDACTED] stands before you. \n\n'It is time to die'\n", 50);
                     _currentScene = 4;
                 }
                 
@@ -444,7 +444,7 @@ namespace HelloDungeonExpanded
                 TypeOutWords("You stumble into a long hallway that splits off into two different paths. One on the left, and one on the right." +
                     "\n", 25);
 
-                GetInput("Which path would you like to take?", "Left", "Right");
+                GetInput("Which path would you like to take?\n", "Left", "Right");
 
                 Random random = new Random();
                 int num = random.Next(1, 3);
@@ -469,6 +469,7 @@ namespace HelloDungeonExpanded
 
                     _player.TakeDamage(40);
                     _player.LoseSanity(20);
+                    _player.GainInfection(15);
                 }
                 else
                 {
@@ -572,7 +573,7 @@ namespace HelloDungeonExpanded
                     Console.Clear();
                     TypeOutWords("You fall into an abyss within your mind. Lifetimes pass before your eyes. " +
                         "\nExistence as you know it crumbles and reality shakes. A faint whisper..." +
-                        "\n'It's time to wake up'", 50);
+                        "\n'It's time to wake up'\n", 50);
                 }
             }
             Console.WriteLine("");
@@ -586,7 +587,7 @@ namespace HelloDungeonExpanded
         {
             
 
-            int choice = GetInput("\n\nWhat would you like to do?\n", "Attack", "Equip Item", "Run Away", "Save");
+            int choice = GetInput("\nWhat would you like to do?\n", "Attack", "Equip Item", "Run Away", "Save");
 
             if (choice == 0)
             {
@@ -614,8 +615,10 @@ namespace HelloDungeonExpanded
                         "\nYou go to it and it opens to a bright and sunny field. You run through and everything is actually there." +
                         "\nYou touch the dewy grass with your bloddied fingertips. Your grasp the tall floawers growing all around." +
                         "\nYou feel the warmth all around you. You are happy. A familiar whisper...\n\n", 50);
-                    TypeOutWords("'It's time to wake up'", 200);
-                    Console.ReadKey(true);
+                    TypeOutWords("'It's time to wake up'\n", 200);
+                    TypeOutWords("Press ENTER to continue", 50);
+                    Console.ReadKey();
+                    Console.Clear();
                     _currentScene = 5;
                 }
                 else
@@ -675,6 +678,8 @@ namespace HelloDungeonExpanded
                 Console.WriteLine("\nPress ENTER to become INFECTED");
                 Console.ReadKey();
 
+                Console.SetCursorPosition(0, 0);
+
                 TypeOutWords("dddddddddddrebootworld\n" + _playerName + "         ootintomyworld\nmyworldmyworld     ERROR\n       orldREB0OT", 10);
 
                 for (int i = 0; i < 101; i++)
@@ -684,7 +689,7 @@ namespace HelloDungeonExpanded
                     Console.Write("INSTALLING INFECTION ");
                     Console.Write(i + "%");
                     Thread.Sleep(num);
-                    Console.SetCursorPosition(16, 8);
+                    Console.SetCursorPosition(20, 8);
                     Console.Write(" ");
                 }
 
