@@ -9,7 +9,7 @@ namespace TestingDuringClass
     class Game
     {
         bool gameOver = false;
-
+        private Animation _playerAnimation;
 
         public void Run()
         {
@@ -35,76 +35,30 @@ namespace TestingDuringClass
 
             cki = Console.ReadKey();
 
+            _playerAnimation = new Animation();
+
             while (cki.Key != ConsoleKey.Escape)
             {
 
                 if ((cki.Key.ToString() == "UpArrow"))
                 {
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("    0 ");
-                    Console.WriteLine(@"   \|/ ");
-                    Console.WriteLine("    | ");
-                    Console.WriteLine(@"   / \ ");
-                    Console.WriteLine("         ");
-                    Thread.Sleep(200);
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("             ");
-                    Console.WriteLine("    0 ");
-                    Console.WriteLine(@"   /|\ ");
-                    Console.WriteLine("    | ");
-                    Console.WriteLine(@"   | | ");
-                    Thread.Sleep(200);
+                    _playerAnimation.UpMovement();
                 }
                 else if ((cki.Key.ToString() == "DownArrow"))
                 {
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("             ");
-                    Console.WriteLine("             ");
-                    Console.WriteLine(@"     0 ");
-                    Console.WriteLine(@"    |\ ");
-                    Console.WriteLine(@"    _| ");
-                    Thread.Sleep(200);
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("             ");
-                    Console.WriteLine("    0 ");
-                    Console.WriteLine(@"   /|\ ");
-                    Console.WriteLine("    | ");
-                    Console.WriteLine(@"   | | ");
-                    Thread.Sleep(200);
+                    _playerAnimation.DownMovement();
                 }
                 else if ((cki.Key.ToString() == "LeftArrow"))
                 {
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("             ");
-                    Console.WriteLine("  0        ");
-                    Console.WriteLine(@"//|       ");
-                    Console.WriteLine("  |        ");
-                    Console.WriteLine(@" | |      ");
-                    Thread.Sleep(200);
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("             ");
-                    Console.WriteLine("    0 ");
-                    Console.WriteLine(@"   /|\ ");
-                    Console.WriteLine("    | ");
-                    Console.WriteLine(@"   | | ");
-                    Thread.Sleep(200);
+                    _playerAnimation.LeftMovement();
                 }
                 else if ((cki.Key.ToString() == "RightArrow"))
                 {
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("             ");
-                    Console.WriteLine("      0 ");
-                    Console.WriteLine(@"      |\\ ");
-                    Console.WriteLine("      | ");
-                    Console.WriteLine(@"     | | ");
-                    Thread.Sleep(200);
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("             ");
-                    Console.WriteLine("    0        ");
-                    Console.WriteLine(@"   /|\      ");
-                    Console.WriteLine("    |        ");
-                    Console.WriteLine(@"   | |      ");
-                    Thread.Sleep(200);
+                    _playerAnimation.RightMovement();
+                }
+                else if ((cki.Key.ToString() == "Spacebar"))
+                {
+                    _playerAnimation.Background();
                 }
 
                 cki = Console.ReadKey();
